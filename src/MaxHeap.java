@@ -82,7 +82,7 @@ public class MaxHeap {
      else if(size == 2){
       BTNode tmpn = (BTNode)wkqueue.deque();
       tmpn.setRight(n);
-   n.setParent(tmpn);
+      n.setParent(tmpn);
       wkqueue.enque(n);
       if(tmpn.element() < n.element()){
        swapValue(tmpn, n);
@@ -107,7 +107,7 @@ public class MaxHeap {
        do {
            current = tmpn;
            parent = tmpn.getParent();
-        if(current.element() > parent.element()){
+        if(current.element() > parent.element()){	//infinite loop
          swapValue(current, parent);
         }
        }while(parent != root);
@@ -135,6 +135,9 @@ public class MaxHeap {
 		   return n;
 		  }
 		  else{
+			  if(size <= 3){
+				  wkqueue.numOfNodes = wkqueue.rear -1;	//bypass size flag in dequerear()
+			  }
 		   BTNode n = new BTNode(root().element());
 		   BTNode tmpNode = (BTNode)wkqueue.dequerear();
 		   root().setElement(tmpNode.element());
@@ -150,43 +153,45 @@ public class MaxHeap {
 		       while(current != null) {
 		        BTNode lChild = current.getLeft();
 		        BTNode rChild = current.getRight();
-		      
 		        if(lChild != null &&  rChild != null){
-		         if(current.element() >= lChild.element() &&
-		          current.element() >= rChild.element()){
-		          break;
-		         }
-		         else if(lChild.element() >= rChild.element()){
-		          if(current.element() <= lChild.element()){
-		           swapValue(current, lChild);
-		           current = lChild;
-		          }
-		         }
-		         else if(rChild.element() >= lChild.element()){
-		          if(current.element() <= rChild.element()){
-		           swapValue(current, rChild);
-		           current = rChild;
-		          }
-		         }
+		        	if(current.element() >= lChild.element() &&
+        				current.element() >= rChild.element()){
+		        		break;
+		        	}
+		        	else if(lChild.element() >= rChild.element()){
+		        		if(current.element() <= lChild.element()){
+		        			swapValue(current, lChild);
+		        			current = lChild;
+		        		}
+		        	}
+					else if(rChild.element() >= lChild.element()){
+						if(current.element() <= rChild.element()){
+							swapValue(current, rChild);
+							current = rChild;
+						}
+					}
 		        }
 		        else if(lChild == null && rChild != null){
-		         if(current.element() <= rChild.element()){
-		          swapValue(current, rChild);
-		          current = rChild;
-		         }
+		        	if(current.element() <= rChild.element()){
+		        		swapValue(current, rChild);
+		        		current = rChild;
+		        	}
 		        }
 		        else if(lChild != null && rChild == null){
-		         if(current.element() <= lChild.element()){
-		          swapValue(current, lChild); 
-		          current = lChild;
-		         }
+		        	if(current.element() <= lChild.element()){
+		        		swapValue(current, lChild); 
+		        		current = lChild;
+		        	}
+		        	else {
+		        		break;
+		        	}
 		        }
 		        else if(lChild == null && rChild == null){
-		         current = null;
+		        	current = null;
 		        }
-		       }
-		       size = size - 1;
-		   return n;
-		   }
- }
+		       } //while
+	       size = size - 1;
+	       return n;
+	  }
+	}
 }
